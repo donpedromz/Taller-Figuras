@@ -21,13 +21,6 @@ mediante un `Punto`.
 
 ### Desde la linea de comandos
 
-En Linux o macOS:
-
-```bash
-javac -d out $(find src -name "*.java")
-java -cp out Main
-```
-
 En Windows con PowerShell:
 
 ```powershell
@@ -64,31 +57,10 @@ src/
 agregar, listar, comparar, desplazar y escalar. Las clases de `domain` no dependen del
 controlador.
 
-## Diagrama de clases
-
-El diagrama UML se entrega en la version impresa de la entrega, de acuerdo con la
-Parte 1 del enunciado.
-
 ## Integrantes
 
-| Integrante | Clases a cargo |
-|---|---|
-| Juan Pablo Olave Munoz (`donpedromz`) | `Figura`, `Punto`, `FiguraController`, `DimensionInvalidaException`, `Main` |
-| Maria Paz Bustamante (`mariapazbustamante`) | `Circulo`, `Cuadrado`, `Triangulo`, `PentagonoRegular` |
-
-La asignacion de clases por integrante se realizo en el diagrama, en azul el primer
-integrante y en amarillo el segundo.
-
-## Ramas
-
-El proyecto sigue GitFlow:
-
-| Rama | Contenido |
-|---|---|
-| `main` | version estable |
-| `develop` | integracion del trabajo en curso |
-| `feature/` | una funcionalidad o clase por rama |
-| `release/` | preparacion de una version |
-| `hotfix/` | correccion de errores criticos |
-
-Cada rama `feature/` se integra en `develop` mediante un pull request.
+| Integrante | Usuario de GitHub | Clases a cargo |
+|---|---|---|
+| Jhojan Andres Villada | `VilladaV` | `Figura`, `Punto`, `Main` |
+| Juan Pablo Olave Munoz | `donpedromz` | `FiguraController`, `DimensionInvalidaException` |
+| Maria Paz Bustamante | `mariapazbustamante` | `Circulo`, `Cuadrado`, `Triangulo`, `PentagonoRegular` |
