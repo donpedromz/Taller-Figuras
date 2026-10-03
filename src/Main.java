@@ -36,7 +36,10 @@ public class Main {
             System.out.println(SEPARADOR);
             System.out.println("1. Crear una figura");
             System.out.println("2. Ver todas las figuras");
-            System.out.println("3. Salir del sistema");
+            System.out.println("3. Desplazar una figura");
+            System.out.println("4. Escalar una figura");
+            System.out.println("5. Comparar dos figuras");
+            System.out.println("6. Salir del sistema");
             System.out.print("Ingrese una opcion: ");
 
             int opcion;
@@ -52,6 +55,12 @@ public class Main {
             } else if (opcion == 2) {
                 listarFiguras(controller);
             } else if (opcion == 3) {
+                desplazarFigura(scanner, controller);
+            } else if (opcion == 4) {
+                escalarFigura(scanner, controller);
+            } else if (opcion == 5) {
+                compararFiguras(scanner, controller);
+            } else if (opcion == 6) {
                 System.out.println("Saliendo del sistema.");
                 return;
             } else {
@@ -80,6 +89,61 @@ public class Main {
             return;
         }
         controller.listarFiguras();
+    }
+
+    /**
+     * Mueve una figura sobre el plano.
+     */
+    private static void desplazarFigura(Scanner scanner, FiguraController controller) {
+        Figura figura = elegirFigura(scanner, controller);
+        if (figura == null) {
+            return;
+        }
+        float desplazamientoX = leerDecimal(scanner, "Desplazamiento en X: ");
+        float desplazamientoY = leerDecimal(scanner, "Desplazamiento en Y: ");
+        controller.desplazarFigura(figura, desplazamientoX, desplazamientoY);
+        System.out.println(figura.getTipo() + " " + figura.getDimensiones()
+                + " en la posicion " + figura.getPosicion());
+    }
+
+    /**
+     * Cambia el tamano de una figura aplicando un factor.
+     */
+    private static void escalarFigura(Scanner scanner, FiguraController controller) {
+        Figura figura = elegirFigura(scanner, controller);
+        if (figura == null) {
+            return;
+        }
+        try {
+            float factor = leerDecimal(scanner, "Factor de escalamiento: ");
+            controller.escalarFigura(figura, factor);
+            System.out.println(figura.getTipo() + " " + figura.getDimensiones()
+                    + ", area " + figura.calcularArea()
+                    + ", perimetro " + figura.calcularPerimetro());
+        } catch (DimensionInvalidaException exception) {
+            System.out.println(exception.getMessage());
+        }
+    }
+
+    /**
+     * Compara dos figuras mediante su dimensionamiento.
+     */
+    private static void compararFiguras(Scanner scanner, FiguraController controller) {
+        Figura primera = elegirFigura(scanner, controller);
+        if (primera == null) {
+            return;
+        }
+        Figura segunda = elegirFigura(scanner, controller);
+        if (segunda == null) {
+            return;
+        }
+        if (!primera.getTipo().equals(segunda.getTipo())) {
+            System.out.println("Aviso: la comparacion esta definida entre figuras del mismo tipo.");
+        }
+        boolean iguales = controller.compararFiguras(primera, segunda);
+        System.out.println(primera.getTipo() + " " + primera.getDimensiones()
+                + " y " + segunda.getTipo() + " " + segunda.getDimensiones()
+                + " -> " + (iguales ? "mismo dimensionamiento" : "dimensionamiento diferente"));
     }
 
     /**
@@ -118,6 +182,25 @@ public class Main {
         } catch (DimensionInvalidaException exception) {
             System.out.println(exception.getMessage());
             System.out.println("La figura no fue creada.");
+            return null;
+        }
+    }
+
+    /**
+     * Muestra las figuras disponibles y devuelve la que elige el usuario.
+     */
+    private static Figura elegirFigura(Scanner scanner, FiguraController controller) {
+        if (controller.estaVacio()) {
+            System.out.println("No hay figuras registradas.");
+            return null;
+        }
+        controller.listarFiguras();
+        System.out.print("Ingrese el numero de la figura: ");
+        int indice = leerEntero(scanner);
+        try {
+            return controller.getFigura(indice);
+        } catch (IndexOutOfBoundsException exception) {
+            System.out.println(exception.getMessage());
             return null;
         }
     }
