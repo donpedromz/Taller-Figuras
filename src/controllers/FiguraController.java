@@ -58,4 +58,38 @@ public class  FiguraController {
     public void desplazarFigura(Figura figura, float desplazamientoX, float desplazamientoY){
         figura.desplazar(desplazamientoX, desplazamientoY);
     }
+
+    /**
+     * Obtiene una figura por su índice en el arreglo.
+     * @author donpedromz
+     * @version 1.0.0
+     * @param indice Índice de la figura en el arreglo
+     * @return La figura en el índice especificado
+     */
+    public Figura getFigura(int indice){
+        if (indice < 0 || indice >= this.figuras.size()) {
+            throw new IndexOutOfBoundsException("Índice inválido: " + indice);
+        }
+        return this.figuras.get(indice);
+    }
+
+    /**
+     * Verifica si el arreglo de figuras está vacío.
+     * @author donpedromz
+     * @version 1.0.0
+     * @return true si no hay figuras, false en caso contrario
+     */
+    public boolean estaVacio(){
+        return this.figuras.isEmpty();
+    }
+
+    /**
+     * Obtiene la cantidad de figuras en el arreglo.
+     * @author donpedromz
+     * @version 1.0.0
+     * @return Cantidad de figuras
+     */
+    public int getCantidad(){
+        return this.figuras.size();
+    }
 }
