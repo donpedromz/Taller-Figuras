@@ -2,8 +2,6 @@ package domain;
 
 import exceptions.DimensionInvalidaException;
 
-import java.util.Objects;
-
 public class Punto {
     private float x;
     private float y;
@@ -40,23 +38,6 @@ public class Punto {
         if (factor <= 0) {
             throw new DimensionInvalidaException("El factor de escalamiento debe ser mayor que cero, se recibio: " + factor);
         }
-    }
-
-    @Override
-    public boolean equals(Object objeto) {
-        if (this == objeto) {
-            return true;
-        }
-        if (objeto == null || !this.getClass().equals(objeto.getClass())) {
-            return false;
-        }
-        Punto otro = (Punto) objeto;
-        return Float.compare(this.x, otro.x) == 0 && Float.compare(this.y, otro.y) == 0;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.x, this.y);
     }
 
     @Override
