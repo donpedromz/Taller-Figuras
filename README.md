@@ -28,9 +28,12 @@ javac -d out (Get-ChildItem -Path src -Recurse -Filter *.java).FullName
 java -cp out Main
 ```
 
-Al iniciar, el programa muestra el detalle de las figuras de ejemplo y luego ofrece un
-menu con tres opciones: crear una figura, ver todas las figuras y salir del sistema.
-Las opciones `3` terminan la ejecucion.
+Al iniciar, el programa ofrece un menu con seis opciones: crear una figura, ver todas
+las figuras, desplazar una figura, escalarla, comparar dos figuras y salir del sistema.
+
+Para desplazar, escalar o comparar, el menu muestra las figuras registradas con un
+numero y pide el indice de la que se quiere operar. Si no hay ninguna figura registrada,
+lo indica y vuelve al menu.
 
 Si se escribe una dimension incorrecta, como texto o un valor menor o igual a cero, el
 programa informa el motivo y vuelve a solicitar el dato.
