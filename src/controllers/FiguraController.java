@@ -20,8 +20,9 @@ public class  FiguraController {
         this.figuras.add(figura);
     }
     public void listarFiguras(){
-        for(Figura figura : this.figuras){
-            figura.imprimirInformacion();
+        for(int i = 0; i < this.figuras.size(); i++){
+            System.out.println("[" + i + "]");
+            this.figuras.get(i).imprimirInformacion();
         }
     }
     
