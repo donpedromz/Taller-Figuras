@@ -1,0 +1,10 @@
+package views;
+
+import javax.swing.*;
+
+public class MainForm {
+    private JPanel panel1;
+    private JTable table1;
+    private JButton escalarButton;
+    private JButton desplazarButton;
+}
