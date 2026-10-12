@@ -4,6 +4,7 @@ import controllers.*;
 import domain.*;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -17,11 +18,14 @@ import javax.swing.table.DefaultTableModel;
 public class CompararFigura extends JPanel {
 
     private static final int ALTO_FILA = 28;
+    private static final Color COLOR_IGUALES = new Color(21, 101, 61);
+    private static final Color COLOR_DISTINTAS = new Color(173, 28, 28);
     private static final String[] COLUMNAS_FIGURAS =
             {"Tipo", "Dimensionamiento", "X", "Y"};
 
     private final FiguraController controller;
     private final Figura original;
+    private final List<Figura> comparables;
 
     private JPanel panelRaiz;
     private JTable tablaFigurasFiltradas;
@@ -32,6 +36,7 @@ public class CompararFigura extends JPanel {
     public CompararFigura(FiguraController controller, Figura original) {
         this.controller = controller;
         this.original = original;
+        this.comparables = controller.getFigurasComparables(original);
         initComponents();
     }
 
@@ -43,6 +48,7 @@ public class CompararFigura extends JPanel {
         initContenedor();
         initTabla();
         initLabels();
+        conectarSeleccionDeTabla();
     }
 
     /**
@@ -60,8 +66,7 @@ public class CompararFigura extends JPanel {
      */
     private void initTabla() {
         DefaultTableModel modelo = new ModeloTabla();
-        List<Figura> comparables = this.controller.getFigurasComparables(this.original);
-        for (Figura figura : comparables) {
+        for (Figura figura : this.comparables) {
             modelo.addRow(new Object[]{figura.getTipo(),
                     formatear(figura.getDimensionar()),
                     formatear(figura.getX()),
@@ -84,6 +89,40 @@ public class CompararFigura extends JPanel {
         this.labelDimensionamientoOriginal.setText(formatear(this.original.getDimensionar()));
         this.labelDimensionamientoSeleccionada.setText("");
         this.labelResultado.setText("");
+    }
+
+    /**
+     * Completa el dimensionamiento de la figura elegida y el veredicto al
+     * seleccionar una fila. La fila i corresponde a la posicion i de la
+     * lista de comparables. El filtro de getValueIsAdjusting evita
+     * responder dos veces a un mismo cambio.
+     */
+    private void conectarSeleccionDeTabla() {
+        this.tablaFigurasFiltradas.getSelectionModel().addListSelectionListener(evento -> {
+            if (evento.getValueIsAdjusting()) {
+                return;
+            }
+            int fila = this.tablaFigurasFiltradas.getSelectedRow();
+            if (fila < 0) {
+                this.labelDimensionamientoSeleccionada.setText("");
+                this.labelResultado.setText("");
+                return;
+            }
+            Figura elegida = this.comparables.get(fila);
+            this.labelDimensionamientoSeleccionada.setText(formatear(elegida.getDimensionar()));
+
+            boolean iguales = this.controller.compararFiguras(this.original, elegida);
+            this.labelResultado.setText(veredicto(iguales));
+            this.labelResultado.setForeground(iguales ? COLOR_IGUALES : COLOR_DISTINTAS);
+        });
+    }
+
+    /**
+     * Describe el resultado de la comparacion.
+     */
+    private String veredicto(boolean iguales) {
+        return iguales ? "Tienen el mismo dimensionamiento"
+                       : "Tienen dimensionamiento diferente";
     }
 
     /**
