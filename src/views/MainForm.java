@@ -7,9 +7,11 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Dialog.ModalityType;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
+import java.util.List;
 import java.util.Locale;
 
 import controllers.FiguraController;
@@ -188,7 +190,32 @@ public class MainForm extends JPanel {
         for (JButton boton : botonesDeAccion()) {
             boton.setCursor(CURSOR_MANO);
         }
+        compararButton.addActionListener(evento -> abrirComparacion());
         actualizarBotones();
+    }
+
+    /**
+     * Abre el dialogo de comparacion con la figura elegida. Si no hay
+     * figuras comparables, lo avisa en vez de abrir el dialogo.
+     */
+    private void abrirComparacion() {
+        Figura original = controller.getFiguraSeleccionada();
+        if (original == null) {
+            return;
+        }
+        List<Figura> comparables = controller.getFigurasComparables(original);
+        if (comparables.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "No Hay figuras Comparables de este tipo",
+                    "Sin figuras comparables", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        JDialog dialogo = new JDialog(SwingUtilities.getWindowAncestor(this),
+                "Comparar figuras", ModalityType.APPLICATION_MODAL);
+        dialogo.setContentPane(new CompararFigura(controller, original));
+        dialogo.setSize(640, 480);
+        dialogo.setLocationRelativeTo(this);
+        dialogo.setVisible(true);
     }
 
     /**
