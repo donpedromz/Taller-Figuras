@@ -39,12 +39,10 @@ public class MainForm extends JPanel {
     private JPanel panelOpcionesFiguras;
     private Lienzo lienzo1;
     private JLabel cuadradoIcon;
-    private JLabel rectanguloIcon;
     private JLabel pentagonoIcon;
     private JLabel circuloIcon;
     private JPanel panelIconoTriangulo;
     private JPanel panelIconoCuadrado;
-    private JPanel panelIconoRectangulo;
     private JPanel panelIconoPentagono;
     private JPanel panelIconoCirculo;
     private JLabel trainguloIcon;
@@ -81,7 +79,7 @@ public class MainForm extends JPanel {
      */
     private void initEncabezado() {
         for (JLabel etiqueta : new JLabel[]{trainguloIcon, cuadradoIcon,
-                rectanguloIcon, pentagonoIcon, circuloIcon}) {
+                pentagonoIcon, circuloIcon}) {
             etiqueta.setVerticalTextPosition(SwingConstants.BOTTOM);
             etiqueta.setHorizontalTextPosition(SwingConstants.CENTER);
             etiqueta.setForeground(Color.DARK_GRAY);
@@ -95,13 +93,11 @@ public class MainForm extends JPanel {
     private void initSelectorFiguras() {
         aplicarIcono(trainguloIcon, "/assets/triangle.png");
         aplicarIcono(cuadradoIcon, "/assets/square.png");
-        aplicarIcono(rectanguloIcon, "/assets/rectangle.png");
         aplicarIcono(pentagonoIcon, "/assets/pentagon.png");
         aplicarIcono(circuloIcon, "/assets/circle.png");
 
         activarHover(panelIconoTriangulo, trainguloIcon);
         activarHover(panelIconoCuadrado, cuadradoIcon);
-        activarHover(panelIconoRectangulo, rectanguloIcon);
         activarHover(panelIconoPentagono, pentagonoIcon);
         activarHover(panelIconoCirculo, circuloIcon);
     }
