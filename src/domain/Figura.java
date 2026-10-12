@@ -39,6 +39,20 @@ public abstract class Figura {
         return this.punto.toString();
     }
 
+    /**
+     * Coordenada X del punto de referencia de la figura.
+     */
+    public float getX() {
+        return this.punto.getX();
+    }
+
+    /**
+     * Coordenada Y del punto de referencia de la figura.
+     */
+    public float getY() {
+        return this.punto.getY();
+    }
+
     public float getDistanciaAlCentro() {
         return this.punto.distanciaAlOrigen();
     }
