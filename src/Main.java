@@ -1,3 +1,4 @@
+import controllers.FiguraController;
 import views.MainForm;
 
 import javax.swing.JFrame;
@@ -15,8 +16,10 @@ public class Main {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
+            FiguraController controller = new FiguraController();
+
             JFrame ventana = new JFrame("Sistema de Manejo de Figuras Geometricas");
-            ventana.setContentPane(new MainForm());
+            ventana.setContentPane(new MainForm(controller));
             ventana.setSize(ANCHO_VENTANA, ALTO_VENTANA);
             ventana.setMinimumSize(TAMANO_MINIMO);
             ventana.setLocationRelativeTo(null);
