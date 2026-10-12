@@ -33,7 +33,7 @@ public class MainForm extends JPanel {
     private static final int ALTO_FILA = 28;
     private static final double PROPORCION_PANEL_TABLA = 0.40;
     private static final String[] COLUMNAS_FIGURAS =
-            {"Tipo", "Dimensionamiento", "Área", "Perímetro", "X", "Y"};
+            {"Tipo", "Área", "Perímetro", "X", "Y"};
 
     private JPanel panel1;
     private JTable tablaFiguras;
@@ -150,7 +150,6 @@ public class MainForm extends JPanel {
             Figura figura = controller.getFigura(i);
             modelo.addRow(new Object[]{
                     figura.getTipo(),
-                    formatear(figura.getDimensionar()),
                     formatear(figura.calcularArea()),
                     formatear(figura.calcularPerimetro()),
                     formatear(figura.getX()),
