@@ -7,7 +7,7 @@ mediante un `Punto`.
 
 ## Requisitos
 
-- Java 8 o superior. El proyecto esta configurado en IntelliJ con JDK 25 (Corretto).
+- Java 25. El proyecto esta configurado en IntelliJ con JDK 25 (Corretto).
 - No se utilizan librerias externas.
 
 ## Como ejecutar

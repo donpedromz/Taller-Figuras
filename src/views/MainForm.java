@@ -10,6 +10,10 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
+import java.util.Locale;
+
+import controllers.FiguraController;
+import domain.Figura;
 
 /**
  * @author donpedromz
@@ -29,7 +33,7 @@ public class MainForm extends JPanel {
     private static final int ALTO_FILA = 28;
     private static final double PROPORCION_PANEL_TABLA = 0.40;
     private static final String[] COLUMNAS_FIGURAS =
-            {"Tipo", "Dimensionamiento", "Área", "Perímetro", "X", "Y"};
+            {"Tipo", "Área", "Perímetro", "X", "Y"};
 
     private JPanel panel1;
     private JTable tablaFiguras;
@@ -52,8 +56,10 @@ public class MainForm extends JPanel {
     private JPanel seccionBotonesFiguras;
     private JButton eliminarButton;
     private JSplitPane splitPanePrincipal;
+    private final FiguraController controller;
 
-    public MainForm() {
+    public MainForm(FiguraController controller) {
+        this.controller = controller;
         initComponents();
     }
 
@@ -66,6 +72,7 @@ public class MainForm extends JPanel {
         initSelectorFiguras();
         initAreaCentral();
         initTablaFiguras();
+        llenarTablaFiguras();
         initBotones();
     }
 
@@ -129,16 +136,75 @@ public class MainForm extends JPanel {
         tablaFiguras.getTableHeader().setForeground(Color.DARK_GRAY);
         tablaFiguras.setSelectionBackground(COLOR_HOVER);
         tablaFiguras.setSelectionForeground(Color.BLACK);
+        conectarSeleccionDeTabla();
+    }
+
+    /**
+     * Guarda en el controller la figura de la fila elegida. La fila i
+     * corresponde al indice i del controller.
+     */
+    private void llenarTablaFiguras() {
+        DefaultTableModel modelo = (DefaultTableModel) tablaFiguras.getModel();
+        modelo.setRowCount(0);
+        for (int i = 0; i < controller.getCantidad(); i++) {
+            Figura figura = controller.getFigura(i);
+            modelo.addRow(new Object[]{
+                    figura.getTipo(),
+                    formatear(figura.calcularArea()),
+                    formatear(figura.calcularPerimetro()),
+                    formatear(figura.getX()),
+                    formatear(figura.getY())
+            });
+        }
+    }
+
+    /**
+     * Reporta al controller la fila elegida. El filtro de
+     * getValueIsAdjusting evita responder dos veces a un mismo cambio.
+     */
+    private void conectarSeleccionDeTabla() {
+        tablaFiguras.getSelectionModel().addListSelectionListener(evento -> {
+            if (evento.getValueIsAdjusting()) {
+                return;
+            }
+            int fila = tablaFiguras.getSelectedRow();
+            controller.seleccionarFigura(fila < 0 ? null
+                    : controller.getFigura(fila));
+            actualizarBotones();
+        });
+    }
+
+    /**
+     * Formato de dos decimales para las columnas numericas.
+     */
+    private String formatear(float valor) {
+        return String.format(Locale.ROOT, "%.2f", valor);
     }
 
     /**
      * Botones de operacion sobre la figura seleccionada.
      */
     private void initBotones() {
-        for (JButton boton : new JButton[]{desplazarButton, escalarButton,
-                compararButton, eliminarButton}) {
+        for (JButton boton : botonesDeAccion()) {
             boton.setCursor(CURSOR_MANO);
         }
+        actualizarBotones();
+    }
+
+    /**
+     * Habilita los botones solo cuando hay una figura elegida, para que no
+     * se opere sin una referencia.
+     */
+    private void actualizarBotones() {
+        boolean disponible = controller.hayFiguraSeleccionada();
+        for (JButton boton : botonesDeAccion()) {
+            boton.setEnabled(disponible);
+        }
+    }
+
+    private JButton[] botonesDeAccion() {
+        return new JButton[]{desplazarButton, escalarButton,
+                compararButton, eliminarButton};
     }
 
     /**

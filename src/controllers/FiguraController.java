@@ -12,8 +12,11 @@ import java.util.List;
  */
 public class  FiguraController {
     private List<Figura> figuras;
+    private Figura figuraSeleccionada;
+
     public FiguraController(){
         this.figuras = new ArrayList<>();
+        this.figuraSeleccionada = null;
     }
 
     public void agregarFigura(Figura figura){
@@ -91,5 +94,51 @@ public class  FiguraController {
      */
     public int getCantidad(){
         return this.figuras.size();
+    }
+
+    /**
+     * Guarda la figura que el usuario selecciono en la interfaz.
+     * @author donpedromz
+     * @version 1.0.0
+     * @param figura Figura seleccionada, o null para vaciar la seleccion
+     */
+    public void seleccionarFigura(Figura figura){
+        this.figuraSeleccionada = figura;
+    }
+
+    /**
+     * Consulta la figura que el usuario selecciono.
+     * @author donpedromz
+     * @version 1.0.0
+     * @return La figura seleccionada, o null si no hay ninguna
+     */
+    public Figura getFiguraSeleccionada(){
+        return this.figuraSeleccionada;
+    }
+
+    /**
+     * Indica si el usuario tiene una figura seleccionada.
+     * @author donpedromz
+     * @version 1.0.0
+     * @return true si hay una figura seleccionada
+     */
+    public boolean hayFiguraSeleccionada(){
+        return this.figuraSeleccionada != null;
+    }
+
+    /**
+     * Devuelve las figuras del mismo tipo que la recibida, ya que solo se
+     * comparan entre figuras de la misma clase. El filtro compara el tipo
+     * de instancia en lugar de getTipo(), que devuelve texto suelto.
+     * @author donpedromz
+     * @version 1.0.0
+     * @param referencia Figura con la que se va a comparar
+     * @return Figuras comparables con la referencia, excluyendola
+     */
+    public List<Figura> getFigurasComparables(Figura referencia){
+        return this.figuras.stream()
+                .filter(figura -> figura.getClass() == referencia.getClass())
+                .filter(figura -> figura != referencia)
+                .toList();
     }
 }
