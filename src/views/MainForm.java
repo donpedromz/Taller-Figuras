@@ -109,6 +109,9 @@ public class MainForm extends JPanel {
         activarHover(panelIconoCuadrado, cuadradoIcon);
         activarHover(panelIconoPentagono, pentagonoIcon);
         activarHover(panelIconoCirculo, circuloIcon);
+
+        activarCrear(panelIconoTriangulo, trainguloIcon,
+                this::abrirCrearTriangulo);
     }
 
     /**
@@ -192,6 +195,12 @@ public class MainForm extends JPanel {
         }
         compararButton.addActionListener(evento -> abrirComparacion());
         actualizarBotones();
+    }
+
+    private void abrirCrearTriangulo() {
+        abrirCrear("Crear triángulo",
+                new Crear_triangulo(controller, this::refrescarTrasCrear),
+                740, 480);
     }
 
     /**
