@@ -141,4 +141,12 @@ public class  FiguraController {
                 .filter(figura -> figura != referencia)
                 .toList();
     }
+
+    /**
+     * Devuelve una copia de la lista de figuras.
+     * @return Copia inmodificable de las figuras registradas
+     */
+    public List<Figura> getFiguras(){
+        return List.copyOf(this.figuras);
+    }
 }

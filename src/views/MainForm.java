@@ -75,6 +75,7 @@ public class MainForm extends JPanel {
         initAreaCentral();
         initTablaFiguras();
         llenarTablaFiguras();
+        actualizarLienzo();
         initBotones();
     }
 
@@ -173,6 +174,7 @@ public class MainForm extends JPanel {
             controller.seleccionarFigura(fila < 0 ? null
                     : controller.getFigura(fila));
             actualizarBotones();
+            actualizarLienzo();
         });
     }
 
@@ -192,6 +194,14 @@ public class MainForm extends JPanel {
         }
         compararButton.addActionListener(evento -> abrirComparacion());
         actualizarBotones();
+    }
+
+    /**
+     * Sincroniza el lienzo con las figuras y la seleccion actuales.
+     */
+    private void actualizarLienzo() {
+        lienzo1.setFiguras(controller.getFiguras());
+        lienzo1.setSeleccionada(controller.getFiguraSeleccionada());
     }
 
     /**
