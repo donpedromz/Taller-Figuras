@@ -191,7 +191,26 @@ public class MainForm extends JPanel {
             boton.setCursor(CURSOR_MANO);
         }
         compararButton.addActionListener(evento -> abrirComparacion());
+        desplazarButton.addActionListener(evento -> abrirDesplazado());
         actualizarBotones();
+    }
+
+    /**
+     * Abre el dialogo de desplazamiento con la figura elegida y refresca
+     * la tabla y el lienzo al aplicarlo.
+     */
+    private void abrirDesplazado() {
+        Figura seleccionada = controller.getFiguraSeleccionada();
+        if (seleccionada == null) {
+            return;
+        }
+        JDialog dialogo = new JDialog(SwingUtilities.getWindowAncestor(this),
+                "Desplazar figura", ModalityType.APPLICATION_MODAL);
+        dialogo.setContentPane(new DesplazarFigura(controller, seleccionada,
+                this::refrescarTrasOperacion));
+        dialogo.setSize(460, 360);
+        dialogo.setLocationRelativeTo(this);
+        dialogo.setVisible(true);
     }
 
     /**
