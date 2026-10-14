@@ -75,6 +75,7 @@ public class MainForm extends JPanel {
         initAreaCentral();
         initTablaFiguras();
         llenarTablaFiguras();
+        actualizarLienzo();
         initBotones();
     }
 
@@ -182,6 +183,7 @@ public class MainForm extends JPanel {
             controller.seleccionarFigura(fila < 0 ? null
                     : controller.getFigura(fila));
             actualizarBotones();
+            actualizarLienzo();
         });
     }
 
@@ -318,6 +320,14 @@ public class MainForm extends JPanel {
         dialogo.setSize(460, 360);
         dialogo.setLocationRelativeTo(this);
         dialogo.setVisible(true);
+    }
+
+    /**
+     * Sincroniza el lienzo con las figuras y la seleccion actuales.
+     */
+    private void actualizarLienzo() {
+        lienzo1.setFiguras(controller.getFiguras());
+        lienzo1.setSeleccionada(controller.getFiguraSeleccionada());
     }
 
     /**

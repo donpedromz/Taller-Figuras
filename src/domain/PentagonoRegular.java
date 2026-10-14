@@ -42,6 +42,14 @@ public final class PentagonoRegular extends Figura {
         this.setApotema(this.apotema * factor);
     }
 
+    public float getLado() {
+        return this.lado;
+    }
+
+    public float getApotema() {
+        return this.apotema;
+    }
+
     private void setApotema(float apotema) {
         validarPositivo(apotema, "apotema del pentagono");
         this.apotema = apotema;

@@ -8,6 +8,14 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.util.ArrayList;
+import java.util.List;
+
+import domain.Circulo;
+import domain.Cuadrado;
+import domain.Figura;
+import domain.PentagonoRegular;
+import domain.Triangulo;
 
 /**
  * @author donpedromz
@@ -44,6 +52,16 @@ public class Lienzo extends JPanel {
     private static final Stroke TRAZO_FINO = new BasicStroke(1f);
     private static final Stroke TRAZO_GRUESO = new BasicStroke(1.4f);
     private static final Stroke TRAZO_EJE = new BasicStroke(1.6f);
+    private static final Stroke TRAZO_FIGURA = new BasicStroke(1.8f);
+    private static final Stroke TRAZO_SELECCIONADA = new BasicStroke(3f);
+
+    private static final Color COLOR_TRIANGULO = new Color(66, 133, 244);
+    private static final Color COLOR_CUADRADO = new Color(52, 168, 83);
+    private static final Color COLOR_PENTAGONO = new Color(244, 160, 0);
+    private static final Color COLOR_CIRCULO = new Color(234, 67, 53);
+
+    private List<Figura> figuras = new ArrayList<>();
+    private Figura seleccionada;
 
     public Lienzo() {
         setBackground(Color.WHITE);
@@ -67,6 +85,7 @@ public class Lienzo extends JPanel {
             dibujarGrilla(g2d, ancho, alto, origenX, origenY);
             dibujarEjes(g2d, ancho, alto, origenX, origenY);
             dibujarOrigen(g2d, origenX, origenY);
+            dibujarFiguras(g2d, origenX, origenY);
         } finally {
             g2d.dispose();
         }
@@ -124,7 +143,7 @@ public class Lienzo extends JPanel {
     }
 
     /**
-     * Cantidad de líneas de la grilla que entran entre dos píxeles.
+     * Cantidad de líneas de la grilla que entran entre dos píxeles
      */
     private int unidadesEntre(int desde, int hasta) {
         return (int) Math.ceil((double) (hasta - desde) / ESCALA);
@@ -149,12 +168,93 @@ public class Lienzo extends JPanel {
     }
 
     /**
-     * Marca el punto (0,0) del plano.
+     * Marca el punto 0,0 del plano.
      */
     private void dibujarOrigen(Graphics2D g2d, int origenX, int origenY) {
         int diametro = 2 * RADIO_ORIGEN;
         g2d.setColor(COLOR_ORIGEN);
         g2d.fillOval(origenX - RADIO_ORIGEN, origenY - RADIO_ORIGEN,
                 diametro, diametro);
+    }
+
+    /**
+     * Actualiza las figuras a dibujar.
+     */
+    public void setFiguras(List<Figura> figuras) {
+        this.figuras = new ArrayList<>(figuras);
+        repaint();
+    }
+
+    /**
+     * Marca la figura resaltada en el plano.
+     */
+    public void setSeleccionada(Figura seleccionada) {
+        this.seleccionada = seleccionada;
+        repaint();
+    }
+
+    /**
+     * Dibuja cada figura centrada en su posicion X Y.
+     */
+    private void dibujarFiguras(Graphics2D g2d, int origenX, int origenY) {
+        for (Figura figura : this.figuras) {
+            int px = origenX + Math.round(figura.getX() * ESCALA);
+            int py = origenY - Math.round(figura.getY() * ESCALA);
+            boolean esSeleccionada = figura == this.seleccionada;
+            if (figura instanceof Circulo circulo) {
+                dibujarCirculo(g2d, circulo.getRadio(), px, py,
+                        COLOR_CIRCULO, esSeleccionada);
+            } else if (figura instanceof Triangulo triangulo) {
+                dibujarPoligono(g2d, 3, triangulo.getLado(), -Math.PI / 2.0,
+                        px, py, COLOR_TRIANGULO, esSeleccionada);
+            } else if (figura instanceof Cuadrado cuadrado) {
+                dibujarPoligono(g2d, 4, cuadrado.getLado(), -Math.PI / 4.0,
+                        px, py, COLOR_CUADRADO, esSeleccionada);
+            } else if (figura instanceof PentagonoRegular pentagono) {
+                dibujarPoligono(g2d, 5, pentagono.getLado(), -Math.PI / 2.0,
+                        px, py, COLOR_PENTAGONO, esSeleccionada);
+            }
+        }
+    }
+
+    /**
+     * Dibuja un circulo con el radio dado, en pixeles del plano.
+     */
+    private void dibujarCirculo(Graphics2D g2d, float radio, int cx, int cy,
+                                Color color, boolean esSeleccionada) {
+        int r = Math.max(2, Math.round(radio * ESCALA));
+        Stroke trazoAnterior = g2d.getStroke();
+        g2d.setColor(new Color(color.getRed(), color.getGreen(),
+                color.getBlue(), esSeleccionada ? 80 : 40));
+        g2d.fillOval(cx - r, cy - r, 2 * r, 2 * r);
+        g2d.setColor(color);
+        g2d.setStroke(esSeleccionada ? TRAZO_SELECCIONADA : TRAZO_FIGURA);
+        g2d.drawOval(cx - r, cy - r, 2 * r, 2 * r);
+        g2d.setStroke(trazoAnterior);
+    }
+
+    /**
+     * Dibuja un poligono regular de lados y lado dados, rotado segun el
+     * angulo inicial recibido.
+     */
+    private void dibujarPoligono(Graphics2D g2d, int lados, float lado,
+                                 double anguloInicial, int cx, int cy,
+                                 Color color, boolean esSeleccionada) {
+        double radio = (lado * ESCALA) / (2.0 * Math.sin(Math.PI / lados));
+        int[] xs = new int[lados];
+        int[] ys = new int[lados];
+        for (int i = 0; i < lados; i++) {
+            double angulo = anguloInicial + i * 2.0 * Math.PI / lados;
+            xs[i] = cx + (int) Math.round(radio * Math.cos(angulo));
+            ys[i] = cy + (int) Math.round(radio * Math.sin(angulo));
+        }
+        Stroke trazoAnterior = g2d.getStroke();
+        g2d.setColor(new Color(color.getRed(), color.getGreen(),
+                color.getBlue(), esSeleccionada ? 80 : 40));
+        g2d.fillPolygon(xs, ys, lados);
+        g2d.setColor(color);
+        g2d.setStroke(esSeleccionada ? TRAZO_SELECCIONADA : TRAZO_FIGURA);
+        g2d.drawPolygon(xs, ys, lados);
+        g2d.setStroke(trazoAnterior);
     }
 }

@@ -39,6 +39,10 @@ public final class Triangulo extends Figura {
         this.setLado(this.lado * factor);
     }
 
+    public float getLado() {
+        return this.lado;
+    }
+
     private void setLado(float lado) {
         validarPositivo(lado, "lado del triangulo");
         this.lado = lado;

@@ -143,6 +143,11 @@ public class  FiguraController {
     }
 
     /**
+     * Devuelve una copia de la lista de figuras.
+     * @return Copia inmodificable de las figuras registradas
+     */
+    public List<Figura> getFiguras(){
+        return List.copyOf(this.figuras);
      * Elimina una figura del arreglo. Si era la seleccionada,
      * vacia la seleccion.
      * @param figura La figura a eliminar

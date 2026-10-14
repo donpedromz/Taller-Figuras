@@ -37,6 +37,10 @@ public final class Circulo extends Figura {
         this.setRadio(this.radio * factor);
     }
 
+    public float getRadio() {
+        return this.radio;
+    }
+
     private void setRadio(float radio) {
         validarPositivo(radio, "radio del circulo");
         this.radio = radio;
