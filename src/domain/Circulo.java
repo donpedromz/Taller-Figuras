@@ -3,7 +3,7 @@ package domain;
 import java.util.List;
 
 public final class Circulo extends Figura {
-    private static final int SEGMENTOS_APROXIMACION = 48;
+    private static final int SEGMENTOS_APROXIMACION = 180;
 
     private float radio;
 
