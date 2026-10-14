@@ -2,8 +2,11 @@ package domain;
 
 import exceptions.DimensionInvalidaException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Figura {
-    private final Punto punto;
+    protected final Punto punto;
 
     protected Figura() {
         this.punto = new Punto(0.0f, 0.0f);
@@ -16,6 +19,13 @@ public abstract class Figura {
     public abstract float calcularArea();
 
     public abstract float calcularPerimetro();
+
+    /**
+     * Puntos del contorno de la figura, en coordenadas del plano. Cada
+     * subclase dice como se dibuja, asi la vista no necesita preguntar por
+     * el tipo de instancia.
+     */
+    public abstract List<Punto> obtenerContorno();
 
     protected abstract float dimensionar();
 
@@ -70,6 +80,22 @@ public abstract class Figura {
             throw new DimensionInvalidaException(
                     "La dimension " + nombre + " debe ser mayor que cero, se recibio: " + valor);
         }
+    }
+
+    /**
+     * Genera el contorno de un poligono regular de lados indicados, con el
+     * radio circunscrito dado y arrancando en el angulo inicial recibido.
+     */
+    protected List<Punto> contornoRegular(int lados, float radio,
+                                      double anguloInicial) {
+        List<Punto> contorno = new ArrayList<>(lados);
+        for (int i = 0; i < lados; i++) {
+            double angulo = anguloInicial + (i * 2.0 * Math.PI / lados);
+            contorno.add(new Punto(
+                    this.punto.getX() + (float) (radio * Math.cos(angulo)),
+                    this.punto.getY() + (float) (radio * Math.sin(angulo))));
+        }
+        return contorno;
     }
 
     @Override

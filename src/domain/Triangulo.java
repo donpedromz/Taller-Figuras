@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.List;
+
 public final class Triangulo extends Figura {
     private static final int CANTIDAD_DE_LADOS = 3;
 
@@ -27,6 +29,12 @@ public final class Triangulo extends Figura {
     @Override
     public float calcularPerimetro() {
         return this.lado * CANTIDAD_DE_LADOS;
+    }
+
+    @Override
+    public List<Punto> obtenerContorno() {
+        return contornoRegular(CANTIDAD_DE_LADOS, this.calcularAltura() * 2 / 3,
+                -Math.PI / 2);
     }
 
     @Override

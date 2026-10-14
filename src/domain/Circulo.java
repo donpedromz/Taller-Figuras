@@ -1,6 +1,10 @@
 package domain;
 
+import java.util.List;
+
 public final class Circulo extends Figura {
+    private static final int SEGMENTOS_APROXIMACION = 48;
+
     private float radio;
 
     public Circulo(float radio) {
@@ -25,6 +29,11 @@ public final class Circulo extends Figura {
     @Override
     public float calcularPerimetro() {
         return (float) (2 * Math.PI * this.radio);
+    }
+
+    @Override
+    public List<Punto> obtenerContorno() {
+        return contornoRegular(SEGMENTOS_APROXIMACION, this.radio, 0);
     }
 
     @Override
