@@ -6,6 +6,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Figura {
+    /**
+     * Dimension maxima de una figura, en unidades del plano. Con la escala
+     * del lienzo de 24 px por unidad, 20 unidades ocupan 480 px, que entra
+     * completo en el lienzo de 520 px.
+     */
+    protected static final float DIMENSION_MAXIMA = 20f;
+
+    /**
+     * Distancia maxima del punto de referencia al origen. El lienzo llega
+     * a unos 770 px de ancho, o sea 32 unidades de radio, asi que 40 deja
+     * margen para que una figura no se vaya del todo.
+     */
+    protected static final float POSICION_MAXIMA = 40f;
+
     protected final Punto punto;
 
     protected Figura() {
@@ -36,6 +50,8 @@ public abstract class Figura {
     }
 
     public void desplazar(float desplazamientoX, float desplazamientoY) {
+        validarPosicion(this.punto.getX() + desplazamientoX,
+                this.punto.getY() + desplazamientoY);
         this.punto.desplazar(desplazamientoX, desplazamientoY);
     }
 
@@ -79,6 +95,28 @@ public abstract class Figura {
         if (!Float.isFinite(valor) || valor <= 0) {
             throw new DimensionInvalidaException(
                     "La dimension " + nombre + " debe ser un numero positivo, se recibio: " + valor);
+        }
+        if (valor > DIMENSION_MAXIMA) {
+            throw new DimensionInvalidaException(
+                    "La dimension " + nombre + " no puede superar " + DIMENSION_MAXIMA
+                            + ", se recibio: " + valor);
+        }
+    }
+
+    /**
+     * Verifica que un punto quede dentro del area visible del plano. Se usa
+     * despues de desplazar, porque sumar varias veces puede salirse.
+     */
+    protected void validarPosicion(float x, float y) {
+        if (!Float.isFinite(x) || !Float.isFinite(y)) {
+            throw new DimensionInvalidaException(
+                    "Las coordenadas deben ser numeros finitos, se recibio: ("
+                            + x + ", " + y + ")");
+        }
+        if (Math.abs(x) > POSICION_MAXIMA || Math.abs(y) > POSICION_MAXIMA) {
+            throw new DimensionInvalidaException(
+                    "Las coordenadas no pueden superar " + POSICION_MAXIMA
+                            + " en valor absoluto, se recibio: (" + x + ", " + y + ")");
         }
     }
 
