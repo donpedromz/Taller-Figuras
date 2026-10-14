@@ -1,5 +1,6 @@
 package domain;
 
+import java.awt.Color;
 import java.util.List;
 
 public final class Circulo extends Figura {
@@ -9,6 +10,8 @@ public final class Circulo extends Figura {
  * de 0.003 px para un radio de 72 px, muy por debajo de un pixel.
  */
 private static final int SEGMENTOS_APROXIMACION = 360;
+
+    private static final Color COLOR = new Color(234, 67, 53);
 
     private float radio;
 
@@ -39,6 +42,11 @@ private static final int SEGMENTOS_APROXIMACION = 360;
     @Override
     public List<Punto> obtenerContorno() {
         return contornoRegular(SEGMENTOS_APROXIMACION, this.radio, 0);
+    }
+
+    @Override
+    public Color obtenerColor() {
+        return COLOR;
     }
 
     @Override
