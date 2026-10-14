@@ -11,6 +11,8 @@ import java.util.List;
  * de figuras y la manipulación de este modelo y su información.
  */
 public class  FiguraController {
+    private static final float EPSILON = 1e-4f;
+
     private List<Figura> figuras;
     private Figura figuraSeleccionada;
 
@@ -30,13 +32,15 @@ public class  FiguraController {
     }
     
     /**
-     * Compara dos figuras mediante su dimensionamiento
+     * Compara dos figuras mediante su dimensionamiento. Usa una tolerancia
+     * porque el dimensionamiento sale de calculos en punto flotante y dos
+     * valores que deben ser iguales pueden diferir en el ultimo bit.
      * @param figura1
      * @param figura2
      * @return
      */
     public boolean compararFiguras(Figura figura1, Figura figura2){
-        return figura1.getDimensionar() == figura2.getDimensionar();
+        return Math.abs(figura1.getDimensionar() - figura2.getDimensionar()) < EPSILON;
     }
 
     /**
