@@ -201,6 +201,28 @@ public class MainForm extends JPanel {
         }
         escalarButton.addActionListener(evento -> abrirEscalado());
         compararButton.addActionListener(evento -> abrirComparacion());
+        eliminarButton.addActionListener(evento -> eliminarSeleccionada());
+        actualizarBotones();
+    }
+
+    /**
+     * Pide confirmacion y elimina la figura seleccionada.
+     */
+    private void eliminarSeleccionada() {
+        Figura seleccionada = controller.getFiguraSeleccionada();
+        if (seleccionada == null) {
+            return;
+        }
+        int respuesta = JOptionPane.showConfirmDialog(this,
+                "¿Eliminar " + seleccionada.getTipo() + " "
+                        + seleccionada.getDimensiones() + "?",
+                "Eliminar figura", JOptionPane.YES_NO_OPTION);
+        if (respuesta != JOptionPane.YES_OPTION) {
+            return;
+        }
+        controller.eliminarFigura(seleccionada);
+        tablaFiguras.clearSelection();
+        llenarTablaFiguras();
         desplazarButton.addActionListener(evento -> abrirDesplazado());
         actualizarBotones();
     }
