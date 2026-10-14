@@ -112,6 +112,12 @@ public class MainForm extends JPanel {
 
         activarCrear(panelIconoPentagono, pentagonoIcon,
                 this::abrirCrearPentagono);
+        activarCrear(panelIconoCuadrado, cuadradoIcon,
+                this::abrirCrearCuadrado);
+        activarCrear(panelIconoTriangulo, trainguloIcon,
+                this::abrirCrearTriangulo);
+        activarCrear(panelIconoCirculo, circuloIcon,
+                this::abrirCrearCirculo);
     }
 
     /**
@@ -201,6 +207,45 @@ public class MainForm extends JPanel {
         abrirCrear("Crear pentágono",
                 new Crear_pentagono(controller, this::refrescarTrasCrear),
                 560, 540);
+    private void abrirCrearCuadrado() {
+        abrirCrear("Crear cuadrilátero",
+                new Crear_cuadrilaterlo_form(controller, this::refrescarTrasCrear),
+                560, 520);
+    private void abrirCrearTriangulo() {
+        abrirCrear("Crear triángulo",
+                new Crear_triangulo(controller, this::refrescarTrasCrear),
+                740, 480);
+    }
+
+    /**
+     * Abre el dialogo de creacion recibido y refresca la tabla al crear.
+     */
+    private void abrirCrear(String titulo, JPanel contenido,
+                            int ancho, int alto) {
+        JDialog dialogo = new JDialog(SwingUtilities.getWindowAncestor(this),
+                titulo, ModalityType.APPLICATION_MODAL);
+        dialogo.setContentPane(contenido);
+        dialogo.setSize(ancho, alto);
+        dialogo.setLocationRelativeTo(this);
+        dialogo.setVisible(true);
+    }
+
+    private void abrirCrearCirculo() {
+        abrirCrear("Crear círculo",
+                new Crear_circulo(controller, this::refrescarTrasCrear),
+                560, 480);
+    }
+
+    /**
+     * Recarga la tabla y selecciona la figura recien creada (la ultima).
+     */
+    private void refrescarTrasCrear() {
+        llenarTablaFiguras();
+        int ultima = controller.getCantidad() - 1;
+        if (ultima >= 0) {
+            tablaFiguras.setRowSelectionInterval(ultima, ultima);
+        }
+        actualizarBotones();
     }
 
     /**
@@ -282,6 +327,20 @@ public class MainForm extends JPanel {
         for (JComponent icono : iconos) {
             icono.addMouseListener(hover);
         }
+    }
+
+    /**
+     * Abre el dialogo de creacion al hacer clic en el panel o su icono.
+     */
+    private void activarCrear(JPanel panel, JComponent icono, Runnable abrir) {
+        MouseAdapter click = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evento) {
+                abrir.run();
+            }
+        };
+        panel.addMouseListener(click);
+        icono.addMouseListener(click);
     }
 
     /**
