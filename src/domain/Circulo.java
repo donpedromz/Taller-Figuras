@@ -3,7 +3,12 @@ package domain;
 import java.util.List;
 
 public final class Circulo extends Figura {
-    private static final int SEGMENTOS_APROXIMACION = 180;
+    /**
+ * Segmentos con que se aproxima la circunferencia. El error de un poligono
+ * de N lados es r * (1 - cos(pi/N)), que con 360 segmentos queda por debajo
+ * de 0.003 px para un radio de 72 px, muy por debajo de un pixel.
+ */
+private static final int SEGMENTOS_APROXIMACION = 360;
 
     private float radio;
 
