@@ -110,6 +110,8 @@ public class MainForm extends JPanel {
         activarHover(panelIconoPentagono, pentagonoIcon);
         activarHover(panelIconoCirculo, circuloIcon);
 
+        activarCrear(panelIconoPentagono, pentagonoIcon,
+                this::abrirCrearPentagono);
         activarCrear(panelIconoCuadrado, cuadradoIcon,
                 this::abrirCrearCuadrado);
         activarCrear(panelIconoTriangulo, trainguloIcon,
@@ -201,6 +203,10 @@ public class MainForm extends JPanel {
         actualizarBotones();
     }
 
+    private void abrirCrearPentagono() {
+        abrirCrear("Crear pentágono",
+                new Crear_pentagono(controller, this::refrescarTrasCrear),
+                560, 540);
     private void abrirCrearCuadrado() {
         abrirCrear("Crear cuadrilátero",
                 new Crear_cuadrilaterlo_form(controller, this::refrescarTrasCrear),
