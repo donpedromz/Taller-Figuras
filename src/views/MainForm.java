@@ -110,6 +110,15 @@ public class MainForm extends JPanel {
         activarHover(panelIconoCuadrado, cuadradoIcon);
         activarHover(panelIconoPentagono, pentagonoIcon);
         activarHover(panelIconoCirculo, circuloIcon);
+
+        activarCrear(panelIconoPentagono, pentagonoIcon,
+                this::abrirCrearPentagono);
+        activarCrear(panelIconoCuadrado, cuadradoIcon,
+                this::abrirCrearCuadrado);
+        activarCrear(panelIconoTriangulo, trainguloIcon,
+                this::abrirCrearTriangulo);
+        activarCrear(panelIconoCirculo, circuloIcon,
+                this::abrirCrearCirculo);
     }
 
     /**
@@ -192,8 +201,125 @@ public class MainForm extends JPanel {
         for (JButton boton : botonesDeAccion()) {
             boton.setCursor(CURSOR_MANO);
         }
+        escalarButton.addActionListener(evento -> abrirEscalado());
         compararButton.addActionListener(evento -> abrirComparacion());
+        eliminarButton.addActionListener(evento -> eliminarSeleccionada());
         actualizarBotones();
+    }
+
+    /**
+     * Pide confirmacion y elimina la figura seleccionada.
+     */
+    private void eliminarSeleccionada() {
+        Figura seleccionada = controller.getFiguraSeleccionada();
+        if (seleccionada == null) {
+            return;
+        }
+        int respuesta = JOptionPane.showConfirmDialog(this,
+                "¿Eliminar " + seleccionada.getTipo() + " "
+                        + seleccionada.getDimensiones() + "?",
+                "Eliminar figura", JOptionPane.YES_NO_OPTION);
+        if (respuesta != JOptionPane.YES_OPTION) {
+            return;
+        }
+        controller.eliminarFigura(seleccionada);
+        tablaFiguras.clearSelection();
+        llenarTablaFiguras();
+        desplazarButton.addActionListener(evento -> abrirDesplazado());
+        actualizarBotones();
+    }
+
+    private void abrirCrearPentagono() {
+        abrirCrear("Crear pentágono",
+                new Crear_pentagono(controller, this::refrescarTrasCrear),
+                560, 540);
+    private void abrirCrearCuadrado() {
+        abrirCrear("Crear cuadrilátero",
+                new Crear_cuadrilaterlo_form(controller, this::refrescarTrasCrear),
+                560, 520);
+    private void abrirCrearTriangulo() {
+        abrirCrear("Crear triángulo",
+                new Crear_triangulo(controller, this::refrescarTrasCrear),
+                740, 480);
+    }
+
+    /**
+     * Abre el dialogo de creacion recibido y refresca la tabla al crear.
+     */
+    private void abrirCrear(String titulo, JPanel contenido,
+                            int ancho, int alto) {
+        JDialog dialogo = new JDialog(SwingUtilities.getWindowAncestor(this),
+                titulo, ModalityType.APPLICATION_MODAL);
+        dialogo.setContentPane(contenido);
+        dialogo.setSize(ancho, alto);
+        dialogo.setLocationRelativeTo(this);
+        dialogo.setVisible(true);
+    }
+
+    private void abrirCrearCirculo() {
+        abrirCrear("Crear círculo",
+                new Crear_circulo(controller, this::refrescarTrasCrear),
+                560, 480);
+    }
+
+    /**
+     * Recarga la tabla y selecciona la figura recien creada (la ultima).
+     */
+    private void refrescarTrasCrear() {
+        llenarTablaFiguras();
+        int ultima = controller.getCantidad() - 1;
+        if (ultima >= 0) {
+            tablaFiguras.setRowSelectionInterval(ultima, ultima);
+        }
+        actualizarBotones();
+    }
+
+    /**
+     * Abre el dialogo de escalado con la figura elegida y refresca la
+     * tabla al aplicar el factor.
+     */
+    private void abrirEscalado() {
+        Figura seleccionada = controller.getFiguraSeleccionada();
+        if (seleccionada == null) {
+            return;
+        }
+        JDialog dialogo = new JDialog(SwingUtilities.getWindowAncestor(this),
+                "Escalar figura", ModalityType.APPLICATION_MODAL);
+        dialogo.setContentPane(new EscalarFigura(controller, seleccionada,
+                this::refrescarTrasOperacion));
+        dialogo.setSize(440, 320);
+        dialogo.setLocationRelativeTo(this);
+        dialogo.setVisible(true);
+    }
+
+    /**
+     * Recarga la tabla conservando la seleccion y repinta el lienzo.
+     */
+    private void refrescarTrasOperacion() {
+        int fila = tablaFiguras.getSelectedRow();
+        llenarTablaFiguras();
+        if (fila >= 0 && fila < controller.getCantidad()) {
+            tablaFiguras.setRowSelectionInterval(fila, fila);
+        }
+        actualizarBotones();
+    }
+
+    /**
+     * Abre el dialogo de desplazamiento con la figura elegida y refresca
+     * la tabla y el lienzo al aplicarlo.
+     */
+    private void abrirDesplazado() {
+        Figura seleccionada = controller.getFiguraSeleccionada();
+        if (seleccionada == null) {
+            return;
+        }
+        JDialog dialogo = new JDialog(SwingUtilities.getWindowAncestor(this),
+                "Desplazar figura", ModalityType.APPLICATION_MODAL);
+        dialogo.setContentPane(new DesplazarFigura(controller, seleccionada,
+                this::refrescarTrasOperacion));
+        dialogo.setSize(460, 360);
+        dialogo.setLocationRelativeTo(this);
+        dialogo.setVisible(true);
     }
 
     /**
@@ -283,6 +409,20 @@ public class MainForm extends JPanel {
         for (JComponent icono : iconos) {
             icono.addMouseListener(hover);
         }
+    }
+
+    /**
+     * Abre el dialogo de creacion al hacer clic en el panel o su icono.
+     */
+    private void activarCrear(JPanel panel, JComponent icono, Runnable abrir) {
+        MouseAdapter click = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evento) {
+                abrir.run();
+            }
+        };
+        panel.addMouseListener(click);
+        icono.addMouseListener(click);
     }
 
     /**

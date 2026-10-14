@@ -148,5 +148,14 @@ public class  FiguraController {
      */
     public List<Figura> getFiguras(){
         return List.copyOf(this.figuras);
+     * Elimina una figura del arreglo. Si era la seleccionada,
+     * vacia la seleccion.
+     * @param figura La figura a eliminar
+     */
+    public void eliminarFigura(Figura figura){
+        this.figuras.remove(figura);
+        if (figura == this.figuraSeleccionada) {
+            this.figuraSeleccionada = null;
+        }
     }
 }
