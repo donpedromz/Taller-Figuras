@@ -180,11 +180,19 @@ public class MainForm extends JPanel {
                 return;
             }
             int fila = tablaFiguras.getSelectedRow();
-            controller.seleccionarFigura(fila < 0 ? null
-                    : controller.getFigura(fila));
+            controller.seleccionarFigura(filaValida(fila) ? controller.getFigura(fila) : null);
             actualizarBotones();
             actualizarLienzo();
         });
+    }
+
+    /**
+     * Indica si la fila corresponde a una figura existente. Sin este control
+     * una tabla desincronizada haria que getFigura lanzara en el hilo de
+     * eventos, que muestra un stack trace en vez de un mensaje.
+     */
+    private boolean filaValida(int fila) {
+        return fila >= 0 && fila < controller.getCantidad();
     }
 
     /**

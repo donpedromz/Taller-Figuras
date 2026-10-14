@@ -76,9 +76,9 @@ public abstract class Figura {
     }
 
     protected static void validarPositivo(float valor, String nombre) {
-        if (valor <= 0) {
+        if (!Float.isFinite(valor) || valor <= 0) {
             throw new DimensionInvalidaException(
-                    "La dimension " + nombre + " debe ser mayor que cero, se recibio: " + valor);
+                    "La dimension " + nombre + " debe ser un numero positivo, se recibio: " + valor);
         }
     }
 
