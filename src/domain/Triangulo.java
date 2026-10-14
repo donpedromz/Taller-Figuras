@@ -1,9 +1,12 @@
 package domain;
 
+import java.awt.Color;
 import java.util.List;
 
 public final class Triangulo extends Figura {
     private static final int CANTIDAD_DE_LADOS = 3;
+
+    private static final Color COLOR = new Color(66, 133, 244);
 
     private float lado;
 
@@ -35,6 +38,11 @@ public final class Triangulo extends Figura {
     public List<Punto> obtenerContorno() {
         return contornoRegular(CANTIDAD_DE_LADOS, this.calcularAltura() * 2 / 3,
                 Math.PI / 2);
+    }
+
+    @Override
+    public Color obtenerColor() {
+        return COLOR;
     }
 
     @Override

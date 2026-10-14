@@ -2,6 +2,7 @@ package domain;
 
 import exceptions.DimensionInvalidaException;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,13 @@ public abstract class Figura {
      * el tipo de instancia.
      */
     public abstract List<Punto> obtenerContorno();
+
+    /**
+     * Color con el que la figura se dibuja en el lienzo. Cada subclase
+     * declara el suyo, asi la vista no necesita conocer todos los tipos para
+     * saber que pintar.
+     */
+    public abstract Color obtenerColor();
 
     protected abstract float dimensionar();
 
