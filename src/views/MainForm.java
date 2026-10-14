@@ -112,6 +112,8 @@ public class MainForm extends JPanel {
 
         activarCrear(panelIconoTriangulo, trainguloIcon,
                 this::abrirCrearTriangulo);
+        activarCrear(panelIconoCirculo, circuloIcon,
+                this::abrirCrearCirculo);
     }
 
     /**
@@ -204,6 +206,37 @@ public class MainForm extends JPanel {
     }
 
     /**
+     * Abre el dialogo de creacion recibido y refresca la tabla al crear.
+     */
+    private void abrirCrear(String titulo, JPanel contenido,
+                            int ancho, int alto) {
+        JDialog dialogo = new JDialog(SwingUtilities.getWindowAncestor(this),
+                titulo, ModalityType.APPLICATION_MODAL);
+        dialogo.setContentPane(contenido);
+        dialogo.setSize(ancho, alto);
+        dialogo.setLocationRelativeTo(this);
+        dialogo.setVisible(true);
+    }
+
+    private void abrirCrearCirculo() {
+        abrirCrear("Crear círculo",
+                new Crear_circulo(controller, this::refrescarTrasCrear),
+                560, 480);
+    }
+
+    /**
+     * Recarga la tabla y selecciona la figura recien creada (la ultima).
+     */
+    private void refrescarTrasCrear() {
+        llenarTablaFiguras();
+        int ultima = controller.getCantidad() - 1;
+        if (ultima >= 0) {
+            tablaFiguras.setRowSelectionInterval(ultima, ultima);
+        }
+        actualizarBotones();
+    }
+
+    /**
      * Abre el dialogo de comparacion con la figura elegida. Si no hay
      * figuras comparables, lo avisa en vez de abrir el dialogo.
      */
@@ -282,6 +315,20 @@ public class MainForm extends JPanel {
         for (JComponent icono : iconos) {
             icono.addMouseListener(hover);
         }
+    }
+
+    /**
+     * Abre el dialogo de creacion al hacer clic en el panel o su icono.
+     */
+    private void activarCrear(JPanel panel, JComponent icono, Runnable abrir) {
+        MouseAdapter click = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evento) {
+                abrir.run();
+            }
+        };
+        panel.addMouseListener(click);
+        icono.addMouseListener(click);
     }
 
     /**
