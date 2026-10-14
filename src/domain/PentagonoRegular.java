@@ -40,7 +40,7 @@ public final class PentagonoRegular extends Figura {
     public List<Punto> obtenerContorno() {
         return contornoRegular(CANTIDAD_DE_LADOS,
                 (float) (this.apotema / Math.cos(Math.PI / CANTIDAD_DE_LADOS)),
-                -Math.PI / 2);
+                Math.PI / 2);
     }
 
     @Override

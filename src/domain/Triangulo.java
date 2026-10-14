@@ -34,7 +34,7 @@ public final class Triangulo extends Figura {
     @Override
     public List<Punto> obtenerContorno() {
         return contornoRegular(CANTIDAD_DE_LADOS, this.calcularAltura() * 2 / 3,
-                -Math.PI / 2);
+                Math.PI / 2);
     }
 
     @Override
