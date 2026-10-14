@@ -1,9 +1,12 @@
 package domain;
 
+import java.awt.Color;
 import java.util.List;
 
 public final class Cuadrado extends Figura {
     private static final int CANTIDAD_DE_LADOS = 4;
+
+    private static final Color COLOR = new Color(52, 168, 83);
 
     private float lado;
 
@@ -35,6 +38,11 @@ public final class Cuadrado extends Figura {
     public List<Punto> obtenerContorno() {
         return contornoRegular(CANTIDAD_DE_LADOS,
                 this.calcularDistanciaAlCentro(), -Math.PI / 4);
+    }
+
+    @Override
+    public Color obtenerColor() {
+        return COLOR;
     }
 
     @Override

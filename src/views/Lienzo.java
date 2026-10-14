@@ -10,14 +10,9 @@ import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import domain.Circulo;
-import domain.Cuadrado;
 import domain.Figura;
-import domain.PentagonoRegular;
 import domain.Punto;
-import domain.Triangulo;
 
 /**
  * @author donpedromz
@@ -56,18 +51,6 @@ public class Lienzo extends JPanel {
     private static final Stroke TRAZO_EJE = new BasicStroke(1.6f);
     private static final Stroke TRAZO_FIGURA = new BasicStroke(1.8f);
     private static final Stroke TRAZO_SELECCIONADA = new BasicStroke(3f);
-
-    private static final Color COLOR_TRIANGULO = new Color(66, 133, 244);
-    private static final Color COLOR_CUADRADO = new Color(52, 168, 83);
-    private static final Color COLOR_PENTAGONO = new Color(244, 160, 0);
-    private static final Color COLOR_CIRCULO = new Color(234, 67, 53);
-
-    /** Color por clase de figura, para no preguntar el tipo en el dibujo. */
-    private static final Map<Class<?>, Color> COLOR_POR_TIPO = Map.of(
-            Triangulo.class, COLOR_TRIANGULO,
-            Cuadrado.class, COLOR_CUADRADO,
-            PentagonoRegular.class, COLOR_PENTAGONO,
-            Circulo.class, COLOR_CIRCULO);
 
     private List<Figura> figuras = new ArrayList<>();
     private Figura seleccionada;
@@ -203,14 +186,11 @@ public class Lienzo extends JPanel {
     }
 
     /**
-     * Dibuja cada figura usando el contorno que ella misma informa.
+     * Dibuja cada figura usando el contorno y el color que ella misma
+     * informa.
      */
     private void dibujarFiguras(Graphics2D g2d, int origenX, int origenY) {
         for (Figura figura : this.figuras) {
-            Color color = COLOR_POR_TIPO.get(figura.getClass());
-            if (color == null) {
-                continue;
-            }
             List<Punto> contorno = figura.obtenerContorno();
             int[] xs = new int[contorno.size()];
             int[] ys = new int[contorno.size()];
@@ -219,7 +199,8 @@ public class Lienzo extends JPanel {
                 xs[i] = origenX + Math.round(punto.getX() * ESCALA);
                 ys[i] = origenY - Math.round(punto.getY() * ESCALA);
             }
-            dibujarPoligono(g2d, xs, ys, color, figura == this.seleccionada);
+            dibujarPoligono(g2d, xs, ys, figura.obtenerColor(),
+                    figura == this.seleccionada);
         }
     }
 

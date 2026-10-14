@@ -1,11 +1,14 @@
 package domain;
 
 import exceptions.DimensionInvalidaException;
+import java.awt.Color;
 import java.util.List;
 import java.util.Locale;
 
 public final class PentagonoRegular extends Figura {
     private static final int CANTIDAD_DE_LADOS = 5;
+
+    private static final Color COLOR = new Color(244, 160, 0);
 
     private float apotema;
     private float lado;
@@ -41,6 +44,11 @@ public final class PentagonoRegular extends Figura {
         return contornoRegular(CANTIDAD_DE_LADOS,
                 (float) (this.apotema / Math.cos(Math.PI / CANTIDAD_DE_LADOS)),
                 Math.PI / 2);
+    }
+
+    @Override
+    public Color obtenerColor() {
+        return COLOR;
     }
 
     @Override
