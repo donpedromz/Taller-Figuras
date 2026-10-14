@@ -202,6 +202,7 @@ public class MainForm extends JPanel {
             boton.setCursor(CURSOR_MANO);
         }
         escalarButton.addActionListener(evento -> abrirEscalado());
+        desplazarButton.addActionListener(evento -> abrirDesplazado());
         compararButton.addActionListener(evento -> abrirComparacion());
         eliminarButton.addActionListener(evento -> eliminarSeleccionada());
         actualizarBotones();
@@ -225,7 +226,6 @@ public class MainForm extends JPanel {
         controller.eliminarFigura(seleccionada);
         tablaFiguras.clearSelection();
         llenarTablaFiguras();
-        desplazarButton.addActionListener(evento -> abrirDesplazado());
         actualizarBotones();
     }
 
@@ -233,10 +233,14 @@ public class MainForm extends JPanel {
         abrirCrear("Crear pentágono",
                 new Crear_pentagono(controller, this::refrescarTrasCrear),
                 560, 540);
+    }
+
     private void abrirCrearCuadrado() {
         abrirCrear("Crear cuadrilátero",
                 new Crear_cuadrilaterlo_form(controller, this::refrescarTrasCrear),
                 560, 520);
+    }
+
     private void abrirCrearTriangulo() {
         abrirCrear("Crear triángulo",
                 new Crear_triangulo(controller, this::refrescarTrasCrear),
@@ -272,6 +276,7 @@ public class MainForm extends JPanel {
             tablaFiguras.setRowSelectionInterval(ultima, ultima);
         }
         actualizarBotones();
+        actualizarLienzo();
     }
 
     /**
@@ -302,6 +307,7 @@ public class MainForm extends JPanel {
             tablaFiguras.setRowSelectionInterval(fila, fila);
         }
         actualizarBotones();
+        actualizarLienzo();
     }
 
     /**
