@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.List;
+
 public final class Cuadrado extends Figura {
     private static final int CANTIDAD_DE_LADOS = 4;
 
@@ -27,6 +29,12 @@ public final class Cuadrado extends Figura {
     @Override
     public float calcularPerimetro() {
         return this.lado * CANTIDAD_DE_LADOS;
+    }
+
+    @Override
+    public List<Punto> obtenerContorno() {
+        return contornoRegular(CANTIDAD_DE_LADOS,
+                this.calcularDistanciaAlCentro(), -Math.PI / 4);
     }
 
     @Override

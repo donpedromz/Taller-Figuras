@@ -1,6 +1,7 @@
 package domain;
 
 import exceptions.DimensionInvalidaException;
+import java.util.List;
 import java.util.Locale;
 
 public final class PentagonoRegular extends Figura {
@@ -33,6 +34,13 @@ public final class PentagonoRegular extends Figura {
     @Override
     public float calcularPerimetro() {
         return this.lado * CANTIDAD_DE_LADOS;
+    }
+
+    @Override
+    public List<Punto> obtenerContorno() {
+        return contornoRegular(CANTIDAD_DE_LADOS,
+                (float) (this.apotema / Math.cos(Math.PI / CANTIDAD_DE_LADOS)),
+                Math.PI / 2);
     }
 
     @Override
