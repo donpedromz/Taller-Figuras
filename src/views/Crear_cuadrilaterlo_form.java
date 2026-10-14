@@ -16,15 +16,13 @@ import java.awt.Window;
 /**
  * Dialogo para crear cuadrilateros. Diseno en
  * Crear_cuadrilatero_form.form (Swing UI Designer), aqui solo logica.
- * Pide el lado y la ubicacion inicial (X, Y) de la figura.
+ * Pide el lado de la figura, que se crea en el origen del plano.
  */
 public class Crear_cuadrilaterlo_form extends JPanel {
 
-    private JTextField txtY;
-    private JTextField txtX;
+    private JTextField txtLado;
     private JButton btnCrear;
     private JButton btnLimpiar;
-    private JTextField txtLado;
     private JPanel panelPrincipal;
 
     private final FiguraController controller;
@@ -63,21 +61,12 @@ public class Crear_cuadrilaterlo_form extends JPanel {
             mostrarError("Ingrese un lado numérico válido.");
             return;
         }
-        float x = leerCoordenada(txtX);
-        float y = leerCoordenada(txtY);
-        if (Float.isNaN(x) || Float.isNaN(y)) {
-            mostrarError("Las coordenadas X y Y deben ser numéricas.");
-            return;
-        }
         Figura figura;
         try {
             figura = new Cuadrado(lado);
         } catch (DimensionInvalidaException e) {
             mostrarError(e.getMessage());
             return;
-        }
-        if (x != 0 || y != 0) {
-            controller.desplazarFigura(figura, x, y);
         }
         controller.agregarFigura(figura);
         if (alCrear != null) {
@@ -86,26 +75,8 @@ public class Crear_cuadrilaterlo_form extends JPanel {
         cerrar();
     }
 
-    /**
-     * Lee una coordenada opcional: vacio equivale a cero.
-     * Retorna NaN si el texto no es numerico.
-     */
-    private float leerCoordenada(JTextField campo) {
-        String texto = campo.getText().trim();
-        if (texto.isEmpty()) {
-            return 0;
-        }
-        try {
-            return Float.parseFloat(texto);
-        } catch (NumberFormatException e) {
-            return Float.NaN;
-        }
-    }
-
     private void limpiar() {
         txtLado.setText("");
-        txtX.setText("");
-        txtY.setText("");
     }
 
     private void mostrarError(String mensaje) {
@@ -118,9 +89,5 @@ public class Crear_cuadrilaterlo_form extends JPanel {
         if (ventana != null) {
             ventana.dispose();
         }
-    }
-
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
     }
 }
