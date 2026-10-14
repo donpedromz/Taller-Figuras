@@ -199,6 +199,7 @@ public class MainForm extends JPanel {
         for (JButton boton : botonesDeAccion()) {
             boton.setCursor(CURSOR_MANO);
         }
+        escalarButton.addActionListener(evento -> abrirEscalado());
         compararButton.addActionListener(evento -> abrirComparacion());
         actualizarBotones();
     }
@@ -244,6 +245,36 @@ public class MainForm extends JPanel {
         int ultima = controller.getCantidad() - 1;
         if (ultima >= 0) {
             tablaFiguras.setRowSelectionInterval(ultima, ultima);
+        }
+        actualizarBotones();
+    }
+
+    /**
+     * Abre el dialogo de escalado con la figura elegida y refresca la
+     * tabla al aplicar el factor.
+     */
+    private void abrirEscalado() {
+        Figura seleccionada = controller.getFiguraSeleccionada();
+        if (seleccionada == null) {
+            return;
+        }
+        JDialog dialogo = new JDialog(SwingUtilities.getWindowAncestor(this),
+                "Escalar figura", ModalityType.APPLICATION_MODAL);
+        dialogo.setContentPane(new EscalarFigura(controller, seleccionada,
+                this::refrescarTrasOperacion));
+        dialogo.setSize(440, 320);
+        dialogo.setLocationRelativeTo(this);
+        dialogo.setVisible(true);
+    }
+
+    /**
+     * Recarga la tabla conservando la seleccion y repinta el lienzo.
+     */
+    private void refrescarTrasOperacion() {
+        int fila = tablaFiguras.getSelectedRow();
+        llenarTablaFiguras();
+        if (fila >= 0 && fila < controller.getCantidad()) {
+            tablaFiguras.setRowSelectionInterval(fila, fila);
         }
         actualizarBotones();
     }
