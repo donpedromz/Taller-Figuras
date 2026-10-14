@@ -298,13 +298,18 @@ public class MainForm extends JPanel {
     }
 
     /**
-     * Recarga la tabla conservando la seleccion y repinta el lienzo.
+     * Recarga la tabla conservando la figura seleccionada y repinta el
+     * lienzo. Se busca la figura por identidad en vez de asumir que su
+     * fila es la misma, porque la lista puede haber cambiado.
      */
     private void refrescarTrasOperacion() {
-        int fila = tablaFiguras.getSelectedRow();
+        Figura seleccionada = controller.getFiguraSeleccionada();
         llenarTablaFiguras();
-        if (fila >= 0 && fila < controller.getCantidad()) {
-            tablaFiguras.setRowSelectionInterval(fila, fila);
+        if (seleccionada != null) {
+            int fila = controller.getIndiceDe(seleccionada);
+            if (fila >= 0) {
+                tablaFiguras.setRowSelectionInterval(fila, fila);
+            }
         }
         actualizarBotones();
         actualizarLienzo();

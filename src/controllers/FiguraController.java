@@ -131,6 +131,22 @@ public class  FiguraController {
     }
 
     /**
+     * Devuelve la posicion de una figura en el arreglo, o -1 si no esta.
+     * Compara por identidad: dos figuras pueden tener las mismas
+     * dimensiones y seguir siendo distintas.
+     * @param figura Figura a buscar
+     * @return Indice en el arreglo, o -1
+     */
+    public int getIndiceDe(Figura figura){
+        for (int i = 0; i < this.figuras.size(); i++) {
+            if (this.figuras.get(i) == figura) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
      * Devuelve las figuras del mismo tipo que la recibida, ya que solo se
      * comparan entre figuras de la misma clase. El filtro compara el tipo
      * de instancia en lugar de getTipo(), que devuelve texto suelto.
