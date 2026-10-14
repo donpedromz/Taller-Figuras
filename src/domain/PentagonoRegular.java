@@ -1,5 +1,8 @@
 package domain;
 
+import exceptions.DimensionInvalidaException;
+import java.util.Locale;
+
 public final class PentagonoRegular extends Figura {
     private static final int CANTIDAD_DE_LADOS = 5;
 
@@ -9,6 +12,7 @@ public final class PentagonoRegular extends Figura {
     public PentagonoRegular(float apotema, float lado) {
         this.setApotema(apotema);
         this.setLado(lado);
+        validarApotemaYLado();
     }
 
     @Override
@@ -58,5 +62,19 @@ public final class PentagonoRegular extends Figura {
     private void setLado(float lado) {
         validarPositivo(lado, "lado del pentagono");
         this.lado = lado;
+    }
+
+    /**
+     * Verifica que el apotema sea el correspondiente al lado en un pentagono
+     * regular. La relacion es apotema = lado / (2 * tan(36 grados)).
+     */
+    private void validarApotemaYLado() {
+        float esperado = (float) (this.lado
+                / (2 * Math.tan(Math.PI / CANTIDAD_DE_LADOS)));
+        if (Math.abs(esperado - this.apotema) > esperado * 0.01f) {
+            throw new DimensionInvalidaException("Para un lado de " + this.lado
+                    + ", el apotema debe ser " + String.format(Locale.ROOT, "%.2f", esperado)
+                    + ", se recibio: " + this.apotema);
+        }
     }
 }
