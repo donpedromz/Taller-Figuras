@@ -31,7 +31,6 @@ public abstract class Figura {
 
     public void escalar(float factor) {
         validarPositivo(factor, "factor de escalamiento");
-        this.punto.escalar(factor);
         this.escalarDimensiones(factor);
     }
 
