@@ -238,7 +238,7 @@ public class MainForm extends JPanel {
     private void abrirCrearCuadrado() {
         abrirCrear("Crear cuadrilátero",
                 new Crear_cuadrilaterlo_form(controller, this::refrescarTrasCrear),
-                560, 520);
+                560, 380);
     }
 
     private void abrirCrearTriangulo() {
